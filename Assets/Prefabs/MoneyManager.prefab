@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1011398853849045317
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 679085007995267113}
+  - component: {fileID: 5059895274705358978}
+  m_Layer: 0
+  m_Name: MoneyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &679085007995267113
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011398853849045317}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5059895274705358978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011398853849045317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48df5d359e48b5640ad812f474a20fc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _coinPrefabs:
+  - {fileID: 6243840789002396526, guid: 95614971d37c31446804b629fd13ff55, type: 3}
+  - {fileID: 6243840789002396526, guid: 78f2a743cd307cf43922ea1a923c9864, type: 3}
+  - {fileID: 6243840789002396526, guid: 2f1bbef5556ca8541a73ee9964d809a4, type: 3}
+  - {fileID: 6243840789002396526, guid: 6e3c77c7bb9a3eb4e8c10198ec2b4601, type: 3}
+  - {fileID: 6243840789002396526, guid: 95c5047d7a93a544ea256eac8cba6cdd, type: 3}
+  - {fileID: 6243840789002396526, guid: 9db012a1b9324e845ad3c7ef0987ead1, type: 3}
+  - {fileID: 6243840789002396526, guid: 63a9dd6c98c62c74282ce2b077987857, type: 3}
+  - {fileID: 6243840789002396526, guid: 7bb9d2d9fc4ef0a41b1c5afaf325c476, type: 3}
+  - {fileID: 6243840789002396526, guid: 8f978b265ed98c741a8a17a82ecd405d, type: 3}
+  _coinEjectForce: 1
