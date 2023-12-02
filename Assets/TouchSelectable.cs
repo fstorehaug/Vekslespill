@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 
-public class TouchSelectable : MonoBehaviour
+public class TouchSelectable : MonoBehaviour 
 {
     [SerializeField] private GameObject _selectionIndicator;
 
@@ -15,7 +12,11 @@ public class TouchSelectable : MonoBehaviour
     private Currency.value _value;
     private IDgenerator _id;
     private bool _state = false;
+    private bool _wasDragged = false;
+    private bool _isTarget = false;
 
+    private int _dragbuffer = 5;
+    private int _dragcount = 0;
 
     public Currency.value Value => _value;
     public int Id => _id.Id;
@@ -32,11 +33,59 @@ public class TouchSelectable : MonoBehaviour
         input = new PlayerActions();
         input.Enable();
 
-        input.TouchControlls.Select.performed += Select_performed;
+        input.TouchControlls.Drag.performed += Drag_performed;
+        input.TouchControlls.Select.canceled += Select_cansled;
+        input.TouchControlls.Select.started += Select_started;
     }
 
-    private void Select_performed(InputAction.CallbackContext obj)
+    private void Drag_performed(InputAction.CallbackContext obj)
     {
+        if (!_isTarget)
+        {
+            return;
+        }
+
+        if (!_wasDragged && _dragbuffer > _dragcount)
+        {
+            _dragcount++;
+            return;
+        }
+
+        transform.position = (Vector2)Camera.main.ScreenToWorldPoint(Pointer.current.position.ReadValue());
+
+        _dragcount= 0;
+       _wasDragged= true;
+
+    }
+
+    private void Select_started(InputAction.CallbackContext obj)
+    {
+        if (Vector2.Distance(Camera.main.ScreenToWorldPoint(Pointer.current.position.ReadValue()), transform.position) > .6f)
+        { 
+        return;
+        } 
+        
+        _wasDragged= false;
+        _isTarget = true;
+    }
+
+    private void Select_cansled(InputAction.CallbackContext obj)
+    {
+        if (!_isTarget)
+        {
+            return;
+        }
+        _isTarget = false;
+
+        if (_wasDragged == true) 
+        {
+            _wasDragged = false;
+            return;
+        }
+        
+        if (Vector2.Distance(Camera.main.ScreenToWorldPoint(Pointer.current.position.ReadValue()), transform.position) > .6f)
+            return;
+
         if (_state)
         {
             OnDeSelected();
@@ -45,6 +94,7 @@ public class TouchSelectable : MonoBehaviour
         {
             OnSelected();
         }
+        _state = !_state;
     }
 
     private void OnSelected()

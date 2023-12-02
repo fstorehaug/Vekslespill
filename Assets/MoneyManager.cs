@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using UnityEngine;
 using UnityEngine.Pool;
 public class Currency
@@ -65,19 +66,28 @@ public class MoneyManager : MonoBehaviour
         return new ObjectPool<GameObject>(() => Instantiate(_coinPrefabs[index]), (ob) => ob.SetActive(true), (ob) => ob.SetActive(false), (ob) => Destroy(ob)); 
     }
 
-    public void CreateCurency(Currency.value currency)
+    public void CreateCurency(Currency.value curencyValue)
     {
-        GameObject curency = _objectPools[(int)currency].Get();
-        curency.AddComponent<ConstrainToCamera>();
-        curency.transform.position = _spawnPoint.position;
-        curency.GetComponent<Rigidbody2D>().AddForce(new Vector2(1, UnityEngine.Random.value - .5f).normalized * (UnityEngine.Random.value +.1f)* _coinEjectForce);
-
+        GameObject curencyInstance = _objectPools[(int)curencyValue].Get();
+        curencyInstance.AddComponent<ConstrainToCamera>();
+        curencyInstance.transform.position = _spawnPoint.position;
+        curencyInstance.GetComponent<Rigidbody2D>().AddForce(new Vector2(1, UnityEngine.Random.value - .5f).normalized * (UnityEngine.Random.value +.1f)* _coinEjectForce);
+        GameInstaller.InstallTouchSelectable(curencyInstance.GetComponent<TouchSelectable>(), curencyValue);
     }
 }
 
 public class SelectionManager
 {
     private Dictionary<Currency.value, Dictionary<int, TouchSelectable>> _dictonaryOfSelectedObjects = new();
+
+    public SelectionManager() 
+    {
+        _dictonaryOfSelectedObjects = new();
+        for (int i = 0; i < 9; i++)
+        {
+            _dictonaryOfSelectedObjects[(Currency.value)i] = new(); 
+        }
+    }
 
     public int SumValue
     {

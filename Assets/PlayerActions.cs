@@ -29,12 +29,12 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
             ""actions"": [
                 {
                     ""name"": ""Select"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""f405b744-78b7-4f30-8255-425d0dbdbce5"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Drag"",

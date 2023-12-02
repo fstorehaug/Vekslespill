@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Schema;
 using UnityEngine;
 
 public class GameInstaller : MonoBehaviour
@@ -10,19 +11,27 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private Canvas GameUICanvas;
     [SerializeField] private Transform _spawnLocation;
 
-    private MoneyManager _moneyManagerInstance;
-    private PengeLageKnapper _pengeLageKnapperInstance;
+    private static MoneyManager _moneyManagerInstance;
+    private static PengeLageKnapper _pengeLageKnapperInstance;
+    private static SelectionManager _selectionManager;
 
     public void Awake()
     {
+        _selectionManager = new SelectionManager();
+
         _moneyManagerInstance = Instantiate(_moneyManagerPrefab);
         _pengeLageKnapperInstance = Instantiate(_pengeLageKnapperPrefab, GameUICanvas.transform);
 
         _pengeLageKnapperInstance.Construct(_moneyManagerInstance);
         _moneyManagerInstance.Construct(_spawnLocation);
-    }
 
     
+    }
+
+    public static void InstallTouchSelectable(TouchSelectable item, Currency.value value)
+    {
+        item.Construct(_selectionManager, value);
+    }
 
     
 
