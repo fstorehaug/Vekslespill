@@ -197,7 +197,6 @@ GameObject:
   - component: {fileID: 6243840789002396525}
   - component: {fileID: 6243840789002396527}
   - component: {fileID: 6243840789002396520}
-  - component: {fileID: 6243840789002396523}
   - component: {fileID: -8361796759133214801}
   m_Layer: 0
   m_Name: fifty
@@ -288,7 +287,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 5
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -309,18 +308,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _selectionIndicator: {fileID: 6243840788680402604}
---- !u!114 &6243840789002396523
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6243840789002396526}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62d9a1511e508ea42ac1f87feddf2f14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &-8361796759133214801
 BoxCollider2D:
   m_ObjectHideFlags: 0

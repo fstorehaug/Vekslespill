@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.ExceptionServices;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -57,28 +58,47 @@ public class MoneyManager : MonoBehaviour
         
         for (int i = 0; i< _objectPools.Length; i++)
         {
-            _objectPools[i] = SetupPool(i);
+            _objectPools[i] = SetupPool((Currency.value)i);
         }
     }
 
-    private ObjectPool<GameObject> SetupPool(int index)
+    private ObjectPool<GameObject> SetupPool(Currency.value currencyValue)
     {
-        return new ObjectPool<GameObject>(() => Instantiate(_coinPrefabs[index]), (ob) => ob.SetActive(true), (ob) => ob.SetActive(false), (ob) => Destroy(ob)); 
+
+        return new ObjectPool<GameObject>(() =>
+        {
+            GameObject curencyInstance = Instantiate(_coinPrefabs[(int)currencyValue]);
+            curencyInstance.AddComponent<ConstrainToCamera>();
+            curencyInstance.transform.position = _spawnPoint.position;
+            curencyInstance.GetComponent<Rigidbody2D>().AddForce(new Vector2(1, UnityEngine.Random.value - .5f).normalized * (UnityEngine.Random.value + .1f) * _coinEjectForce);
+            GameInstaller.InstallTouchSelectable(curencyInstance.GetComponent<CurrencyMonoBehaviour>(), currencyValue);
+            return curencyInstance;
+        }
+        , (ob) => {
+            ob.SetActive(true);
+            ob.transform.position = _spawnPoint.position;
+        } 
+        , (ob) => ob.SetActive(false), (ob) => Destroy(ob)); 
+    }
+    public GameObject CreateCurency(Currency.value curencyValue)
+    {
+        return _objectPools[(int)curencyValue].Get();
     }
 
-    public void CreateCurency(Currency.value curencyValue)
+    public void ResycleCurrency(CurrencyMonoBehaviour currency)
+    {
+        _objectPools[(int)currency.Value].Release(currency.gameObject);
+    }
+
+    public void GetCurrency(Currency.value curencyValue)
     {
         GameObject curencyInstance = _objectPools[(int)curencyValue].Get();
-        curencyInstance.AddComponent<ConstrainToCamera>();
-        curencyInstance.transform.position = _spawnPoint.position;
-        curencyInstance.GetComponent<Rigidbody2D>().AddForce(new Vector2(1, UnityEngine.Random.value - .5f).normalized * (UnityEngine.Random.value +.1f)* _coinEjectForce);
-        GameInstaller.InstallTouchSelectable(curencyInstance.GetComponent<TouchSelectable>(), curencyValue);
     }
 }
 
 public class SelectionManager
 {
-    private Dictionary<Currency.value, Dictionary<int, TouchSelectable>> _dictonaryOfSelectedObjects = new();
+    private Dictionary<Currency.value, Dictionary<int, CurrencyMonoBehaviour>> _dictonaryOfSelectedObjects = new();
 
     public SelectionManager() 
     {
@@ -102,7 +122,7 @@ public class SelectionManager
         }
     }
 
-    public void OnSelected(TouchSelectable selectable)
+    public void OnSelected(CurrencyMonoBehaviour selectable)
     {
         if (_dictonaryOfSelectedObjects[selectable.Value] == null)
         {
@@ -112,7 +132,7 @@ public class SelectionManager
         _dictonaryOfSelectedObjects[selectable.Value][selectable.Id] = selectable;
     }
 
-    public void OnDeSelect(TouchSelectable selectable)
+    public void OnDeSelect(CurrencyMonoBehaviour selectable)
     {
         if (!_dictonaryOfSelectedObjects.ContainsKey(selectable.Value))
             return;
