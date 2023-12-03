@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using UnityEngine;
@@ -41,6 +42,8 @@ public class MoneyManager : MonoBehaviour
     private ObjectPool<GameObject>[] _objectPools;
     private Transform _spawnPoint;
 
+    private Dictionary<int, CurrencyMonoBehaviour> _allActiveCoins = new();
+
     public void Construct(Transform spawnPoint)
     {
         _spawnPoint = spawnPoint; 
@@ -77,8 +80,14 @@ public class MoneyManager : MonoBehaviour
         , (ob) => {
             ob.SetActive(true);
             ob.transform.position = _spawnPoint.position;
+            CurrencyMonoBehaviour currency = ob.GetComponent<CurrencyMonoBehaviour>();
+            _allActiveCoins.Add(currency.Id, currency);
         } 
-        , (ob) => ob.SetActive(false), (ob) => Destroy(ob)); 
+        , (ob) => {
+            _allActiveCoins.Remove(ob.GetComponent<CurrencyMonoBehaviour>().Id);
+            ob.SetActive(false);
+        }
+        , (ob) => Destroy(ob)); 
     }
     public GameObject CreateCurency(Currency.value curencyValue)
     {
@@ -89,10 +98,13 @@ public class MoneyManager : MonoBehaviour
     {
         _objectPools[(int)currency.Value].Release(currency.gameObject);
     }
-
-    public void GetCurrency(Currency.value curencyValue)
+    public void ResycleAllCurrency()
     {
-        GameObject curencyInstance = _objectPools[(int)curencyValue].Get();
+        Dictionary<int, CurrencyMonoBehaviour> allActiveCoinsCopy = _allActiveCoins.ToDictionary((entry => entry.Key), (entry => entry.Value)); ;
+        foreach(var coin in allActiveCoinsCopy.Values) {
+            ResycleCurrency(coin);
+        }
+        _allActiveCoins.Clear();
     }
 }
 

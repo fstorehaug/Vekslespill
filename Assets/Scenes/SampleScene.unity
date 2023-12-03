@@ -155,6 +155,7 @@ MonoBehaviour:
   _moneyManagerPrefab: {fileID: 5059895274705358978, guid: e402265527fc45d4a86083803216f9c8, type: 3}
   _pengeLageKnapperPrefab: {fileID: 1495685353247204054, guid: b15d6cecfb4d4b74eaa77e16701454e7, type: 3}
   _changeUIPrefab: {fileID: 3717515162785674361, guid: c32b97a83d5cab14192fd4054fb19862, type: 3}
+  _trashAllCoinsPrefab: {fileID: 8756575327383689204, guid: 3f5bf7ee67a8c434d9b719f65ab98cc6, type: 3}
   GameUICanvas: {fileID: 961877003}
   _spawnLocation: {fileID: 1998328502}
 --- !u!4 &516405453
